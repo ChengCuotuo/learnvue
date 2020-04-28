@@ -17,6 +17,11 @@
             <el-input type="password" v-model="ruleForm.password" autocomplete="off" minlength="6" maxlength="20"></el-input>
           </el-form-item>
 
+           <el-form-item prop="passwords" class="item-form" v-show="model === 'register'">
+            <label>重复密码</label>
+            <el-input type="password" v-model="ruleForm.passwords" autocomplete="off" minlength="6" maxlength="20"></el-input>
+          </el-form-item>
+
           <el-form-item prop="code" class="item-form">
             <label>验证码</label>
             <!-- element-ui 的 row 布局是基于 24 划分的，也就是里面的 col span 总和为 24 -->
@@ -39,47 +44,62 @@
     </div>
 </template>
 <script>
+// 引入验证方法
+import {expEmail, expPassword, expCode } from '@/utils/validate.js';
+
 export default {
   data() {
     var validateUsername = (rule, value, callback) => {
-      let reg = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
       if (value === '') {
         callback(new Error('请输入用户名'));
-      } else if(!reg.test(value)) {
+      } else if(expEmail(value)) {
         callback(new Error('用户名输入错误'));
       } else{
         callback(); // true
       }
     };
     var validatePassword = (rule, value, callback) => {
-      let reg = /^(?!\D+$)(?![^a-zA-Z]+$)\S{6,20}$/;
       if (value === '') {
         callback(new Error('请输入密码'));
-      } else if (!reg.test(value)) {
+      } else if (expPassword(value)) {
         callback(new Error('请输入6到20位数字加字母'));
       } else {
         callback();
       }
     };
+
+    var validatePasswords = (rule, value, callback) => {
+      if (this.model === 'login') {
+        callback();
+      }
+      if (value === '') {
+        callback(new Error('请再次输入密码'));
+      } else if (value != this.ruleForm.password) {
+        callback(new Error('重复密码不正确'));
+      } else {
+        callback();
+      }
+    };
+
     var validateCode = (rule, value, callback) => {
-      var reg = /^[0-9a-z]{6}$/;
       if (value === '') {
         return callback(new Error('请输入验证码'));
-      } else if(!reg.test(value)) {
+      } else if(expCode(value)) {
         return callback(new Error('请输入6位验证码'));
       } else {
         callback();
       }
-     
     };
     return {
+      model: 'login',
       menuTab: [
-        {txt: '登录', current: true},
-        {txt: '注册', current: false}
+        {txt: '登录', current: true, type: 'login'},
+        {txt: '注册', current: false, type: 'register'}
       ],
       ruleForm: {
         username: '',
         password: '',
+        passwords: '',
         code: ''
       },
       // 验证信息
@@ -91,6 +111,9 @@ export default {
         password: [
           { validator: validatePassword, trigger: 'blur' }
         ],
+        passwords: [
+          { validator: validatePasswords, trigger: 'blur' }
+        ],
         code: [
           { validator: validateCode, trigger: 'blur' }
         ]
@@ -101,6 +124,7 @@ export default {
   mounted() {},
   methods: {
     toggleMenu(data) {
+      this.model = data.type;
       this.menuTab.forEach(elem => {
         elem.current = false;
       })
