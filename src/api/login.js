@@ -4,7 +4,7 @@ import request from '@/utils/request';
  * 获取验证码
  */
 export function GetSms(data) {
-    request.request({
+    return request.request({
         method: "post",
         url: "/getSms/",
         data

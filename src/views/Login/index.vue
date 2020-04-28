@@ -7,27 +7,28 @@
         <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" class="login-form">
           
           <el-form-item prop="username" class="item-form">
-            <label>邮箱</label>
+              <!-- label 的 for 属性和 input 是可以做关联的 -->
+            <label for="username">邮箱</label>
             <!-- v-model 实现双重绑定 -->
-            <el-input type="text" v-model="ruleForm.username" autocomplete="off"></el-input>
+            <el-input id="username" type="text" v-model="ruleForm.username" autocomplete="off"></el-input>
           </el-form-item>
 
           <el-form-item prop="password" class="item-form">
-            <label>密码</label>
-            <el-input type="password" v-model="ruleForm.password" autocomplete="off" minlength="6" maxlength="20"></el-input>
+            <label for="password">密码</label>
+            <el-input id="password" type="password" v-model="ruleForm.password" autocomplete="off" minlength="6" maxlength="20"></el-input>
           </el-form-item>
 
            <el-form-item prop="passwords" class="item-form" v-show="model === 'register'">
-            <label>重复密码</label>
-            <el-input type="password" v-model="ruleForm.passwords" autocomplete="off" minlength="6" maxlength="20"></el-input>
+            <label for="passwords">重复密码</label>
+            <el-input id="passwords" type="password" v-model="ruleForm.passwords" autocomplete="off" minlength="6" maxlength="20"></el-input>
           </el-form-item>
 
           <el-form-item prop="code" class="item-form">
-            <label>验证码</label>
+            <label for="code">验证码</label>
             <!-- element-ui 的 row 布局是基于 24 划分的，也就是里面的 col span 总和为 24 -->
             <el-row :gutter="10">
               <el-col :span="15">
-                <el-input v-model.number="ruleForm.code"></el-input>
+                <el-input id="code" v-model.number="ruleForm.code"></el-input>
               </el-col>
               <el-col :span="9">
                 <el-button type="success" class="block" @click="getSms()">获取验证码</el-button>
@@ -37,7 +38,10 @@
           </el-form-item>
 
           <el-form-item>
-            <el-button type="danger" @click="submitForm('ruleForm')" class="login-btn block">提交</el-button>
+            <el-button type="danger" 
+                @click="submitForm('ruleForm')" 
+                class="login-btn block" 
+                :disabled="loginButtonStatus">{{ model === 'register' ? '注册' : '登录' }}</el-button>
           </el-form-item>
       </el-form>
       </div>
@@ -53,7 +57,7 @@ import { GetSms } from '@/api/login';
 
 export default {
   name: 'login',
-  setup(props, {refs}) {
+  setup(props, {refs, root}) {
     let validateUsername = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('请输入用户名'));
@@ -139,6 +143,8 @@ export default {
     // 取值使用 .vaule 赋值也是
     // console.log(model.value)
     model.value = 'login';
+    // 登录按钮是否可用
+    const loginButtonStatus = ref(true);
 
     /**
      * 声明函数
@@ -155,10 +161,29 @@ export default {
      * 获取验证码
      */
     const getSms = (() => {
-        let data = {
-            username: ruleForm.username
+        // 进行提示
+        if (ruleForm.username === '') {
+            // element-ui 里面的 this.$message 在 vue3.0 使用 root.$message 替代
+            root.$message.error('邮箱不能为空！');
+            return false;
         }
-        GetSms(data)
+
+        if (expEmail(ruleForm.username)) {
+            root.$message.error('邮箱格式有误，请重填！');
+            return false;
+        }
+
+        let requestData = { 
+            username: ruleForm.username, 
+            module: 'login' 
+        }
+
+        GetSms(requestData).then(response => {
+            // 这里获取的找到最上层就是 request.js 的 response
+        }).catch(error => {
+            // 这里打印的找到最上层就是 request.js 返回的 Promise
+            console.log(error)
+        })
     })
 
     const submitForm = (formName => {
@@ -190,7 +215,8 @@ export default {
         rules,
         toggleMenu,
         submitForm,
-        getSms
+        getSms,
+        loginButtonStatus
     }
   },
 }
