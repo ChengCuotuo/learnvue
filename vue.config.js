@@ -1,7 +1,7 @@
 const path = require('path')
 
 module.exports = {
-  // 基本路径
+  // 基本路径，通过环境进行选择
     publicPath: process.env.NODE_ENV === 'prodution' ? '' : './', 
     // 输出文件目录
     outputDir: 'dist', 
@@ -52,16 +52,16 @@ module.exports = {
         port: 8080,
         https: false,
         hotOnly: false,   
-        // proxy: {
-        //     '/api': {
-        //         target: 'http://www.baidu.com/api',
-        //         changeOrigin: true, // 允许websockets跨域
-        //         // ws: true,
-        //         pathRewrite: {
-        //             '^/api': ''
-        //         }
-        //     }
-        // } // 代理转发配置，用于调试环境
+        proxy: {
+            '/devApi': {
+                target: 'http://www.web-jshtml.cn/productapi',
+                changeOrigin: true, // 允许websockets跨域
+                // ws: true,
+                pathRewrite: {
+                    '^/devApi': ''
+                }
+            }
+        } // 代理转发配置，用于调试环境
     },
     // 第三方插件配置
     pluginOptions: {}
