@@ -5,7 +5,7 @@ const BASEURL = process.env.NODE_ENV === 'production' ? '' : '/devApi';
 
 const service = axios.create({
     baseURL: BASEURL,
-    timeout: 1000
+    timeout: 15000,  // 超时，受网络延迟的影响，这里的时间不适宜太小
 });
 // 添加请求拦截器
 service.interceptors.request.use(function (config) {
