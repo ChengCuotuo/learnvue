@@ -28,7 +28,7 @@
             <!-- element-ui 的 row 布局是基于 24 划分的，也就是里面的 col span 总和为 24 -->
             <el-row :gutter="10">
               <el-col :span="15">
-                <el-input id="code" v-model.number="ruleForm.code"></el-input>
+                <el-input id="code" v-model="ruleForm.code"></el-input>
               </el-col>
               <el-col :span="9">
                 <el-button type="success" class="block" @click="getSms()" :disabled="codeButtonStatus.status">{{ codeButtonStatus.text }}</el-button>
@@ -53,7 +53,7 @@ import { reactive, ref, toRefs, onMounted,refs } from '@vue/composition-api'
 // 引入验证方法
 import {expEmail, expPassword, expCode } from '@/utils/validate.js';
 
-import { GetSms,Register } from '@/api/login';
+import { GetSms, Register, Login } from '@/api/login';
 
 export default {
   name: 'login',
@@ -221,25 +221,12 @@ export default {
         }, 3000);
     })
 
+    // 提交表单
     const submitForm = (formName => {
         // 获取节点对象 context.refs
         refs[formName].validate((valid) => {
             if (valid) {
-              let requestData = {
-                username: ruleForm.username,
-                password: ruleForm.password,
-                code: ruleForm.code,
-                modle: 'register'
-              }
-              Register(requestData).then(response => {
-                let data = response.data;
-                root.$message({
-                  message: data.message,
-                  type: 'success'
-                })
-              }).catch(error => {
-                console.log(error)
-              })
+              model.value === 'login' ? login() : register();
             } else {
             console.log('error submit!!');
             return false;
@@ -248,12 +235,53 @@ export default {
     })
 
     /**
+     * 登录
+     */
+    const login = (() => {
+      let requestData = {
+        username: ruleForm.username,
+        password: ruleForm.password,
+        code: ruleForm.code
+      }
+      Login(requestData).then(response => {
+        console.log("登陆成功")
+      }).catch(error => {
+        console.lgo(error)
+      })
+    })
+
+    /**
+     * 注册
+     */
+    const register = (() => {
+      let requestData = {
+        username: ruleForm.username,
+        password: ruleForm.password,
+        code: ruleForm.code,
+        modle: 'register'
+      }
+      Register(requestData).then(response => {
+        let data = response.data;
+        root.$message({
+          message: data.message,
+          type: 'success'
+        })
+        // 模拟注册成功
+        toggleMenu(menuTab[0]);
+        clearCountDown();
+      }).catch(error => {
+        // 失败时执行的代码
+        console.log(error)
+      })
+    })
+    /**
      * 倒计时
      */
     const countDown = ((number) => {
       // setTimeout  clearTimeout(变量) 执行一次
       // setInterval clearInterval(变量) 不断执行，需要条件停止
-
+      // 判断定时器是否存在，存在则清除
+      if (timer.value) { clearInterval(timer); }
       let time = number;
       // 获取基础数据值 value
       timer.value = setInterval(() => {
@@ -268,6 +296,16 @@ export default {
         }
 
       }, 1000)
+    })
+
+    /**
+     * 清除倒计时
+     */
+    const clearCountDown = (() => {
+      codeButtonStatus.status = false;
+      codeButtonStatus.text = "获取验证码";
+      //清除倒计时
+      clearInterval(timer.value);
     })
 
     /**

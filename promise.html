@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // resolve、reject、all、ract
+        // resolve == then   reject == catch
+        // let promise = new Promise((resolve, reject) => {
+        //     resolve(1111); // 成功
+        //     reject(2222);  // 失败
+        // })
+
+        // promise.then(response => {
+        //     console.log('成功');
+        //     console.log(response);   // 111
+        // }).catch(error => {
+        //     console.log('失败');
+        //     console.log(response);  // 2222
+        // })
+
+        // 链式
+        function promise1(status) {
+            return new Promise((resolve, reject) => {
+                if (status) {
+                    console.log('第1个promise成功');
+                    resolve('第1个promise返回数据成功');
+                } else if(!status) {
+                    console.log('第1个promise失败');
+                    reject('第1个promise返回数据失败');
+                }
+            })
+        }
+
+        function promise2(status) {
+            return new Promise((resolve, reject) => {
+                if (status) {
+                    console.log('第2个promise成功');
+                    resolve('第2个promise返回数据成功');
+                } else if(!status) {
+                    console.log('第2个promise失败');
+                    reject('第2个promise返回数据失败');
+                }
+            })
+        }
+
+        function promise3(status) {
+            return new Promise((resolve, reject) => {
+                if (status) {
+                    console.log('第3个promise成功');
+                    resolve('第3个promise返回数据成功');
+                } else if(!status) {
+                    console.log('第3个promise失败');
+                    reject('第3个promise返回数据失败');
+                }
+            })
+        }
+        // Promise 的链式调用可以很方便的链接在一起，解决掉了传统的回调，不需要再方法中嵌套别的方法
+        // 使得方法的连接性更加友好
+        //其实将各个方法写完之后再加一个方法根据返回值重定义链接方法也是一样的效果
+        promise1(true)
+        .then(response => {         // 第一个
+            console.log(response);
+            return promise2(true);
+        }).then(response => {       // 第二个
+            console.log(response);
+            return promise3(response);
+        }).then(response => {
+            console.log(response);
+        }).catch(error => {
+            console.log(error);
+        })
+
+        // all数组，数组内有 promise 必须全部成功（全部返回 resolve）才会执行回调
+        Promise.all([promise1(true), promise2(true)]).then(response => {
+            console.log('全部调用成功');
+        }).catch(error => {
+            console.log('有些可能失败');
+        })
+        
+        // race 数组，只要有一个返回 resolve 就表示成功，就会回调 then，但是如果第一个执行 
+        // reject （失败）那么旧失败，被 catch 捕获
+        // Promise.race([promise1(true), promise2(true)]).then(response => {
+        //     console.log('全部调用成功');
+        // }).catch(error => {
+        //     console.log('有些可能失败');
+        // })
+    </script>
+</body>
+</html>
