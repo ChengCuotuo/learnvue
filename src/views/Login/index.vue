@@ -55,6 +55,9 @@ import {expEmail, expPassword, expCode } from '@/utils/validate.js';
 
 import { GetSms, Register, Login } from '@/api/login';
 
+// 引入 加密方式
+import sha1 from 'js-sha1';
+
 export default {
   name: 'login',
 
@@ -175,6 +178,7 @@ export default {
         // 重置表单
         // this.$refs[formName].resetFields(); // 2.0 的写法
         refs.ruleForm.resetFields();  // 或者 refs['ruleForm'].resetFields()；
+        clearCountDown();
     })
 
     /**
@@ -240,7 +244,7 @@ export default {
     const login = (() => {
       let requestData = {
         username: ruleForm.username,
-        password: ruleForm.password,
+        password: sha1(ruleForm.password),
         code: ruleForm.code
       }
       Login(requestData).then(response => {
@@ -256,7 +260,7 @@ export default {
     const register = (() => {
       let requestData = {
         username: ruleForm.username,
-        password: ruleForm.password,
+        password: sha1(ruleForm.password),
         code: ruleForm.code,
         modle: 'register'
       }

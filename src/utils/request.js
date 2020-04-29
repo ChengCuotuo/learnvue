@@ -7,9 +7,25 @@ const service = axios.create({
     baseURL: BASEURL,
     timeout: 15000,  // 超时，受网络延迟的影响，这里的时间不适宜太小
 });
-// 添加请求拦截器
+/**
+ * 请求接口前，做一些数据处理（请求拦截器）
+ */
 service.interceptors.request.use(function (config) {
     // 在发送请求之前做些什么
+    // 后台需要这边传相关的参数（再请求头添加参数）
+    // Tokey
+    // userId
+    // sui
+
+    // 根据业务需求而定
+
+    // 直接获取请求头
+    console.log(config.headers);
+    // 添加 tokey
+    config.headers['Tokey'] = '1111';
+    config.headers['userId'] = '1111';
+    config.headers['sui'] = '1111';
+
     return config;
     // Promis.resolve()
 }, function (error) {
@@ -17,7 +33,9 @@ service.interceptors.request.use(function (config) {
     return Promise.reject(error);
 });
 
-// 添加响应拦截器
+/**
+ * 请求接口后，返回数据进行拦截（响应拦截）
+ */
 service.interceptors.response.use(function (response) {
     // 对响应数据做点什么
     // console.log(response);
