@@ -15,7 +15,20 @@ const routes = [
     path: "/login",
     name: "Login",
     component: () => import("../views/Login/index.vue")
-  }
+  },
+  {
+    path: "/console",
+    name: "Console",
+    component: () => import("../views/Layout/index.vue"),
+    children: [
+      // 第一个需要和父类的路由相同
+      {
+        path: "/console",
+        name: "Console",
+        component: () => import("../views/Console/index.vue")
+      }
+    ]
+  },
   // {
   //   path: "/about",
   //   name: "About",

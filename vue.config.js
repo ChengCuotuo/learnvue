@@ -32,7 +32,7 @@ module.exports = {
         // css 预设器配置项
         loaderOptions: {
             sass : {
-              // prependData: '@import "./src/styles/admin.scss";'
+              prependData: '@import "./src/styles/main.scss";'
             }
         }, 
         // 启用 CSS modules for all css / pre-processor files.

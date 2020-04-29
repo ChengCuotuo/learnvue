@@ -22,9 +22,9 @@ service.interceptors.request.use(function (config) {
     // 直接获取请求头
     console.log(config.headers);
     // 添加 tokey
-    config.headers['Tokey'] = '1111';
-    config.headers['userId'] = '1111';
-    config.headers['sui'] = '1111';
+    // config.headers['Tokey'] = '1111';
+    // config.headers['userId'] = '1111';
+    // config.headers['sui'] = '1111';
 
     return config;
     // Promis.resolve()

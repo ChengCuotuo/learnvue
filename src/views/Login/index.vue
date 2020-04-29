@@ -248,7 +248,11 @@ export default {
         code: ruleForm.code
       }
       Login(requestData).then(response => {
-        console.log("登陆成功")
+        console.log("登录成功");
+        // 路由跳转
+        root.$router.push({
+          name: 'Console'
+        })
       }).catch(error => {
         console.lgo(error)
       })
