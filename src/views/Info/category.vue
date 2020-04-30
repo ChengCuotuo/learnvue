@@ -1,13 +1,16 @@
 <template>
     <div>
-        控制台首页
+        信息分类
     </div>
 </template>
 <script>
 export default {
-    
+    name: 'infoIndex',
+    setup() {
+
+    }
 }
 </script>
-<style lang="stylus" scoped>
+<style scoped>
 
 </style>

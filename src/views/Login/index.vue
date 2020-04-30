@@ -49,7 +49,7 @@
 </template>
 <script>
 
-import { reactive, ref, toRefs, onMounted,refs } from '@vue/composition-api' 
+import { reactive, ref, toRefs, onMounted, refs } from '@vue/composition-api' 
 // 引入验证方法
 import {expEmail, expPassword, expCode } from '@/utils/validate.js';
 
