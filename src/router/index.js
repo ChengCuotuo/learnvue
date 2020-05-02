@@ -4,11 +4,14 @@ import VueRouter from "vue-router";
 
 Vue.use(VueRouter);
 
+// 引入布局主键
+import Layout from '@/views/Layout/index.vue'
+
 const routes = [
   {
     path: "/",
     redirect: "login",
-    hidden: true,
+    hidden: true, // 是否隐藏
     meta: {
       name: '主页'
     }
@@ -20,16 +23,17 @@ const routes = [
     meta: {
       name: '登录'
     },
-    component: () => import("../views/Login/index.vue")
+    component: () => import("../views/Login")   // index 文件名称可以省略，会自动给读取
   },
   {
     path: "/console",
     name: "Console",
-    redirect: "index",
+    redirect: "index",  // 定义初始页面
     meta: {
-      name: '控制台'
+      name: '控制台',
+      icon: 'dashboard'
     },
-    component: () => import("../views/Layout/index.vue"),
+    component: Layout,
     children: [
       {
         path: '/index',
@@ -37,7 +41,7 @@ const routes = [
         meta: {
           name: '首页'
         },
-        component: () => import("../views/Console/index.vue"),
+        component: () => import("../views/Console"),
       }
     ]
   },
@@ -45,9 +49,10 @@ const routes = [
     path: "/info",
     name: "Info",
     meta: {
-      name: '信息管理'
+      name: '信息管理',
+      icon: 'el-icon-info'
     },
-    component: () => import("../views/Layout/index.vue"),
+    component: Layout,
     children: [
       {
         path: "/infoIndex",
@@ -55,7 +60,7 @@ const routes = [
         meta: {
           name: '信息列表'
         },
-        component: () => import("../views/Info/index.vue")
+        component: () => import("../views/Info")
       },
       {
         path: "/infoCategory",
@@ -71,9 +76,10 @@ const routes = [
     path: "/user",
     name: "User",
     meta: {
-      name: '用户管理'
+      name: '用户管理',
+      icon: 'el-icon-help'
     },
-    component: () => import("../views/Layout/index.vue"),
+    component: Layout,
     children: [
       {
         path: "/userIndex",
@@ -81,7 +87,7 @@ const routes = [
         meta: {
           name: '用户列表'
         },
-        component: () => import("../views/User/index.vue")
+        component: () => import("../views/User")
       },
     ]
   }

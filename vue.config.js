@@ -10,12 +10,25 @@ module.exports = {
     // see https://github.com/vuejs/vue-cli/blob/dev/docs/webpack.md
     // webpack配置
     chainWebpack: (config) => {
+      // 自定义的组件，显示 svg 图标
+      const svgRule = config.module.rule('svg');
+      svgRule.uses.clear();
+      svgRule
+        .use("svg-sprite-loader")
+        .loader("svg-sprite-loader")
+        .options({
+          symbolId: "icon-[name]",
+          include: ["./src/icons"] // 指明存储地址
+        });
     },
     configureWebpack: (config) => {
       config.resolve = { // 配置解析别名
         // name: name,
         extensions: ['.js', '.json', '.vue'], // 自动添加文件名后缀
         alias: {
+          // 默认的情况下 vue 运行的是 runtime 模式，并不会加载自定义的 template 需要改成 compiler 模式
+          // 这里只要重新指定 vue 的文件，当 main.js import vue 的时候加载这个 compiler 模式的文件就可以
+          'vue': 'vue/dist/vue.js',
           '@': path.resolve(__dirname, './src'),
           '@c': path.resolve(__dirname, './src/components'),
         }
@@ -49,7 +62,7 @@ module.exports = {
     devServer: {
         open: process.platform === 'darwin',
         open: true,
-        port: 8080,
+        port: 8081,
         https: false,
         hotOnly: false,   
         proxy: {

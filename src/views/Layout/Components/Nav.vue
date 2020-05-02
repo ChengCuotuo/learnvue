@@ -1,7 +1,7 @@
 <template>
     <div id="nav-wrap">
         <!-- transparent 可以显示背景面板的所有颜色 -->
-        <!-- router 变量用来启用 router  -->
+        <!-- el-menu 是 element-ui 中的组件，router 变量用来启用 router  -->
         <el-menu 
             default-active="1-4-1" 
             class="el-menu-vertical-demo"
@@ -15,16 +15,17 @@
 
             <!-- template 标签是不会被解析出来的，使用 v-for 的时候是不允许使用 key 的 -->
             <template v-for="(item, index) in routers">
-                <el-submenu v-if="!item.hidden" :key="item.id" :index="index">
-                <!--一级菜单 -->
-                <template slot="title">
-                    <i class="el-icon-location"></i>
-                    <span slot="title">{{ item.meta.name }}</span>
-                </template>
-                <!-- 二级菜单 -->
-                <!-- index 绑定的数据作为 router 的路径 -->
-                <el-menu-item v-for="subItem in item.children" :key="subItem.id" :index="subItem.path">{{ subItem.meta.name }}</el-menu-item>
-            </el-submenu>
+                <el-submenu v-if="!item.hidden" :key="item.id" :index="index + ''">
+                    <!--一级菜单 -->
+                    <template slot="title">
+                        <!-- <i :class="item.meta.icon"></i> -->
+                        <svg-icon :iconClass="item.meta.icon" :className="item.meta.icon"/>
+                        <span slot="title">{{ item.meta.name }}</span>
+                    </template>
+                    <!-- 二级菜单 -->
+                    <!-- index 绑定的数据作为 router 的路径 -->
+                    <el-menu-item v-for="subItem in item.children" :key="subItem.id" :index="subItem.path">{{ subItem.meta.name }}</el-menu-item>
+                </el-submenu>
             </template>
         </el-menu>
     </div>
