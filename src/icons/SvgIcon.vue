@@ -20,8 +20,8 @@ export default {
         }
     },
     setup(props) {
-        console.log(props.iconClass);
-        console.log(props.className);
+        // console.log(props.iconClass);
+        // console.log(props.className);
 
         /**
          * 计算属性 computed

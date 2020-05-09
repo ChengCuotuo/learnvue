@@ -247,15 +247,25 @@ export default {
         password: sha1(ruleForm.password),
         code: ruleForm.code
       }
-      Login(requestData).then(response => {
+      // 使用的是 store 中的方法，加上命名空间地址
+      root.$store.dispatch('app/login', requestData).then(response => {
         console.log("登录成功");
         // 路由跳转
         root.$router.push({
           name: 'Console'
         })
       }).catch(error => {
-        console.lgo(error)
+        console.log(error)
       })
+      // Login(requestData).then(response => {
+      //   console.log("登录成功");
+      //   // 路由跳转
+      //   root.$router.push({
+      //     name: 'Console'
+      //   })
+      // }).catch(error => {
+      //   console.lgo(error)
+      // })
     })
 
     /**

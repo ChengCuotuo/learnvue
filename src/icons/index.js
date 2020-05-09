@@ -2,6 +2,7 @@ import Vue from 'vue';
 
 import SvgIcon from './SvgIcon';
 
+// 添加全局组件
 Vue.component('svg-icon', SvgIcon);
 
 // svg 的图片解析

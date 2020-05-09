@@ -50,7 +50,7 @@ const routes = [
     name: "Info",
     meta: {
       name: '信息管理',
-      icon: 'el-icon-info'
+      icon: 'info'
     },
     component: Layout,
     children: [
@@ -77,7 +77,7 @@ const routes = [
     name: "User",
     meta: {
       name: '用户管理',
-      icon: 'el-icon-help'
+      icon: 'user'
     },
     component: Layout,
     children: [

@@ -67,7 +67,7 @@ module.exports = {
         hotOnly: false,   
         proxy: {
             '/devApi': {
-                target: 'http://www.web-jshtml.cn/productapi',
+                target: 'http://www.web-jshtml.cn/productapi/token',
                 changeOrigin: true, // 允许websockets跨域
                 // ws: true,
                 pathRewrite: {

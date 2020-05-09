@@ -27,6 +27,7 @@ service.interceptors.request.use(function (config) {
     // config.headers['sui'] = '1111';
 
     return config;
+    // 正确处理的话
     // Promis.resolve()
 }, function (error) {
     // 对请求错误做些什么
